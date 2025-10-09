@@ -1,0 +1,62 @@
+---
+- name: Base server setup
+  hosts: all
+  become: yes
+  vars:
+    will_ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFiSrlKzKmQmUvEe1YOMIq8KApjhOJFHQFjqTYCThfY will@will-macbook.local"
+  tasks:
+    - name: Ensure 'will' user exists
+      ansible.builtin.user:
+        name: will
+        shell: /bin/bash
+        state: present
+
+    - name: Set authorized key for 'will'
+      ansible.builtin.authorized_key:
+        user: will
+        key: "{{ will_ssh_key }}"
+        state: present
+
+    - name: Allow 'will' passwordless sudo
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/will
+        content: "will ALL=(ALL) NOPASSWD:ALL\n"
+        owner: root
+        group: root
+        mode: '0440'
+
+    - name: Disable SSH password authentication
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+        backup: yes
+
+    - name: Restart SSH service
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Install KVM guest tools
+      ansible.builtin.package:
+        name:
+          - qemu-guest-agent
+          - spice-vdagent
+        state: present
+
+    - name: Ensure qemu-guest-agent is started and enabled
+      ansible.builtin.service:
+        name: qemu-guest-agent
+        state: started
+        enabled: yes
+
+
