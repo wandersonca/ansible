@@ -49,3 +49,9 @@
           - qemu-guest-agent
           - spice-vdagent
         state: present
+
+    - name: Ensure qemu-guest-agent is started and enabled
+      ansible.builtin.service:
+        name: qemu-guest-agent
+        state: started
+        enabled: yes
