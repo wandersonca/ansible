@@ -32,3 +32,20 @@
         owner: root
         group: root
         mode: '0440'
+
+    - name: Update all packages
+      ansible.builtin.package:
+        name: '*'
+        state: latest
+
+    - name: Install Apache web server
+      ansible.builtin.package:
+        name: apache2
+        state: present
+
+    - name: Install KVM guest tools
+      ansible.builtin.package:
+        name:
+          - qemu-guest-agent
+          - spice-vdagent
+        state: present
