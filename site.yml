@@ -1,6 +1,13 @@
 ---
-- name: Run all base setup
-  import_playbook: base.yml
+- hosts: all
+  become: yes
+  vars:
+    will_ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFiSrlKzKmQmUvEe1YOMIq8KApjhOJFHQFjqTYCThfY will@will-macbook.local"
+  roles:
+    - base
 
-- name: Run all docker setup
-  import_playbook: docker.yml
+- hosts: docker
+  become: yes
+  roles:
+    - docker
+    - portainer
