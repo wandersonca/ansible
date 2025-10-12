@@ -10,4 +10,13 @@
   become: yes
   roles:
     - docker
-    - portainer
+
+- hosts: portainer_server
+  become: yes
+  roles:
+    - portainer_server
+
+- hosts: portainer_agent
+  become: yes
+  roles:
+    - portainer_agent
