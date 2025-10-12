@@ -1,8 +1,6 @@
 ---
 - hosts: all
   become: yes
-  vars:
-    will_ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFiSrlKzKmQmUvEe1YOMIq8KApjhOJFHQFjqTYCThfY will@will-macbook.local"
   roles:
     - base
 
