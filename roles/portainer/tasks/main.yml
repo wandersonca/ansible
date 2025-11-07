@@ -1,8 +1,7 @@
 ---
-# tasks file for portainer_agent
-- name: Ensure Portainer Agent NFS mounts are available
+- name: Ensure Portainer NFS mounts are available
   vars:
-    portainer_agent_nfs_mounts:
+    portainer_nfs_mounts:
       - src: 192.168.30.99:/mnt/HDD/media
         path: /mnt/media
       - src: 192.168.30.99:/mnt/HDD/plex-share
@@ -17,9 +16,9 @@
         path: "{{ item.path }}"
         state: directory
         mode: "0755"
-      loop: "{{ portainer_agent_nfs_mounts }}"
+      loop: "{{ portainer_nfs_mounts }}"
 
-    - name: Mount Portainer Agent NFS shares
+    - name: Mount Portainer NFS shares
       ansible.posix.mount:
         src: "{{ item.src }}"
         path: "{{ item.path }}"
@@ -28,15 +27,4 @@
         dump: 0
         passno: 0
         state: mounted
-      loop: "{{ portainer_agent_nfs_mounts }}"
-
-- name: Deploy Portainer Agent container
-  docker_container:
-    name: portainer_agent
-    image: portainer/agent:latest
-    restart_policy: always
-    ports:
-      - "9001:9001"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/var/lib/docker/volumes:/var/lib/docker/volumes"
+      loop: "{{ portainer_nfs_mounts }}"
