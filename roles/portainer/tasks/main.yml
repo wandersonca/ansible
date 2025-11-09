@@ -4,8 +4,6 @@
     portainer_nfs_mounts:
       - src: 192.168.30.99:/mnt/HDD/media
         path: /mnt/media
-      - src: 192.168.30.99:/mnt/HDD/plex-share
-        path: /mnt/plex
       - src: 192.168.30.99:/mnt/HDD/torrents
         path: /mnt/torrents
       - src: 192.168.30.99:/mnt/HDD/app
